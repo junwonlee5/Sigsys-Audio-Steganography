@@ -51,32 +51,33 @@ def rewrite(filename, code):
     print(binary_list)
     for a in range(len(binary_list)):
         if binary_list[a] == 1:
-            phase[a] = phase[a]-m.pi/2
-        if binary_list[a] == 0:
-            phase[a] = phase[a]+m.pi/2
+            X[a] = X[a]*1.01
+        elif binary_list[a] == 0 :
+            X[a] = X[a]*0.99
     for b in range(len(X)):
-        X[b] = abs(X[b])*np.exp(phase[b]*1j)
+        X[b] = abs(X[b])*np.exp(np.angle(X[b])*1j)
     orig_data = irfft(X)
     plt.plot(time_array, orig_data)
     plt.show()
-    wav.write('modified'+str(filename) , rate, orig_data)
-    return orig_data, phase, rate,time_array, binary_list
+    wav.write('modified2'+str(filename) , rate, orig_data)
+    return orig_data, X, rate,time_array, binary_list
 def decode(filename, code):
-    orig_data, phase1, rate, time_array, binary_list = rewrite(filename, code)
+    orig_data, X2, rate, time_array, binary_list = rewrite(filename, code)
     X, freqs, phase2, time_array, rate, data = run_fft(filename)
-    phase_diff = phase2-phase1
+    freq_diff = X/X2
+    print(freq_diff[0:len(binary_list)])
     bin_code = []
-    for a in range(len(phase_diff)):
-        if phase_diff[a] == m.pi/2:
-            print(a, phase_diff[a], '1')
+    for a in range(len(freq_diff[0:len(binary_list)])):
+        if round(freq_diff[a], 2) == 0.99:
+            print(a, freq_diff[a], '1')
             bin_code.append('1')
-        if phase_diff[a]  == -m.pi/2:
-            print(a, phase_diff[a], '0')
+        elif round(freq_diff[a], 2)  == 1.01:
+            print(a, freq_diff[a], '0')
             bin_code.append('0')
+        else:
+            print(a, freq_diff[a])
     bin_string = '0b' + ''.join(bin_code)
     print(bin_string)
     n = int(bin_string, 2)
     return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode()
-
-#rewrite('bell1.wav', 'hello')
-print(decode('bell1.wav', 'my name is Junwon'))
+print(decode('bell1.wav', 'My name is Junwon'))
