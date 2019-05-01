@@ -14,15 +14,15 @@ from scipy.io import wavfile
 fs, data = wavfile.read('testaudio/testaudio.wav')
 
 # Create a logarithmic chirp
-fs = 1000.
-N = 10000
-#data[:,0].size
-#data = data[:,0]
+#fs = 1000.
+#N = 10000
+N = data[:,0].size
+data = data[:,0]
 t = np.arange(N) / float(fs)
 f0, f1 = 1., 500.
 phase = (t[-1] / np.log(f1 / f0)) * f0 * (pow(f1 / f0, t / t[-1]) - 1.0)
 #data = np.cos(2 * np.pi * phase)
-data = t*np.cos(440* 2 * np.pi *t)
+#data = t*np.cos(440* 2 * np.pi *t)
 
 
 
