@@ -15,11 +15,11 @@ def parse_audio(filename):
     time_array = np.arange(0, data.shape[0],1)/rate
     length = time_array[-1]
     print(len(time_array), len(data), time_array[-1])
-    plt.plot(time_array, data)
-    plt.xlabel('Time (s)')
-    plt.ylabel('Amplitude')
-    plt.title(str(filename))
-    plt.show()
+    #plt.plot(time_array, data)
+    #plt.xlabel('Time (s)')
+    #plt.ylabel('Amplitude')
+    #plt.title(str(filename))
+    #plt.show()
     return time_array, data, rate
 
 def run_fft(filename):
@@ -30,17 +30,17 @@ def run_fft(filename):
     freqs = rfftfreq(len(data)) * rate
     phase = np.angle(X)
     orig_data = irfft(X)
-    plt.figure(1)
-    plt.subplot(311)
-    plt.plot(freqs, 2*abs(X)/N)
-    plt.subplot(312)
-    plt.plot(freqs, phase)
-    plt.subplot(313)
-    plt.plot(time_array, orig_data)
-    plt.show()
+    #plt.figure(1)
+    #plt.subplot(311)
+    #plt.plot(freqs, 2*abs(X)/N)
+    #plt.subplot(312)
+    #plt.plot(freqs, phase)
+    #plt.subplot(313)
+    #plt.plot(time_array, orig_data)
+    #plt.show()
     return X, freqs, phase, time_array, rate, data
 
-    wav.write('modifiedbell1.wav', rate, orig_data)
+    #wav.write('modifiedbell1.wav', rate, orig_data)
 
 def rewrite(filename, code):
     X, freqs, phase, time_array, rate, data = run_fft(filename)
@@ -57,8 +57,8 @@ def rewrite(filename, code):
     for b in range(len(X)):
         X[b] = abs(X[b])*np.exp(phase[b]*1j)
     orig_data = irfft(X)
-    plt.plot(time_array, orig_data)
-    plt.show()
+    #plt.plot(time_array, orig_data)
+    #plt.show()
     wav.write('modified'+str(filename) , rate, orig_data)
     return orig_data, phase, rate,time_array, binary_list
 def decode(filename, code):
