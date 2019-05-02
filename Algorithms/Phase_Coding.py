@@ -11,10 +11,10 @@ def parse_audio(filename):
     data = data.T[0]
     if data.dtype =='int16':
         data = data / (2.**15)
-    print(data.shape[0])
+    #print(data.shape[0])
     time_array = np.arange(0, data.shape[0],1)/rate
     length = time_array[-1]
-    print(len(time_array), len(data), time_array[-1])
+    #print(len(time_array), len(data), time_array[-1])
     #plt.plot(time_array, data)
     #plt.xlabel('Time (s)')
     #plt.ylabel('Amplitude')
@@ -45,10 +45,10 @@ def run_fft(filename):
 def rewrite(filename, code):
     X, freqs, phase, time_array, rate, data = run_fft(filename)
     code_bin = bin(int.from_bytes(code.encode(), 'big'))
-    print(code_bin)
+    #print(code_bin)
     code_bin = code_bin[2:]
     binary_list = [int(d) for d in str(code_bin)]
-    print(binary_list)
+    #print(binary_list)
     for a in range(len(binary_list)):
         if binary_list[a] == 1:
             phase[a] = phase[a]-m.pi/2
@@ -68,15 +68,15 @@ def decode(filename, code):
     bin_code = []
     for a in range(len(phase_diff)):
         if phase_diff[a] == m.pi/2:
-            print(a, phase_diff[a], '1')
+            #print(a, phase_diff[a], '1')
             bin_code.append('1')
         if phase_diff[a]  == -m.pi/2:
-            print(a, phase_diff[a], '0')
+            #print(a, phase_diff[a], '0')
             bin_code.append('0')
     bin_string = '0b' + ''.join(bin_code)
-    print(bin_string)
+    #print(bin_string)
     n = int(bin_string, 2)
     return n.to_bytes((n.bit_length() + 7) // 8, 'big').decode()
 
 #rewrite('bell1.wav', 'hello')
-print(decode('bell1.wav', 'my name is Junwon'))
+print(decode('bell1.wav', 'Junwon Lee'))
